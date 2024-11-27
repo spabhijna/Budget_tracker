@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Budget Tracker</h1>
+
+        <form id="incomeForm">
+            <h2>Add Income</h2>
+            <input type="number" id="incomeAmount" placeholder="Income Amount" required>
+            <button type="submit">Add Income</button>
+        </form>
+
+        <form id="expenseForm">
+            <h2>Add Expense</h2>
+            <input type="text" id="expenseCategory" placeholder="Category" required>
+            <input type="number" id="expenseAmount" placeholder="Amount" required>
+            <button type="submit">Add Expense</button>
+        </form>
+
+        <form id="savingsForm">
+            <h2>Set Savings Goal</h2>
+            <input type="number" id="savingsGoal" placeholder="Savings Goal" required>
+            <button type="submit">Set Goal</button>
+        </form>
+
+        <button id="resetButton">Reset Database</button>
+        <button id="plotButton">Plot Expense Distribution</button>
+
+        <h3>Budget Summary</h3>
+        <div id="summary"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#incomeForm").submit(function(event) {
+                event.preventDefault();
+                let incomeAmount = $("#incomeAmount").val();
+                $.post("/add_income", {amount: incomeAmount}, function(response) {
+                    alert(response.message);
+                    getBudgetSummary();
+                });
+            });
+
+            $("#expenseForm").submit(function(event) {
+                event.preventDefault();
+                let expenseCategory = $("#expenseCategory").val();
+                let expenseAmount = $("#expenseAmount").val();
+                $.post("/add_expense", {category: expenseCategory, amount: expenseAmount}, function(response) {
+                    alert(response.message);
+                    getBudgetSummary();
+                });
+            });
+
+            $("#savingsForm").submit(function(event) {
+                event.preventDefault();
+                let savingsGoal = $("#savingsGoal").val();
+                $.post("/set_savings", {goal: savingsGoal}, function(response) {
+                    alert(response.message);
+                    getBudgetSummary();
+                });
+            });
+
+            $("#resetButton").click(function() {
+                $.get("/reset_db", function(response) {
+                    alert(response.message);
+                    getBudgetSummary();
+                });
+            });
+
+            $("#plotButton").click(function() {
+                window.location.href = "/plot_expenses";
+            });
+
+            function getBudgetSummary() {
+                $.get("/get_data", function(response) {
+                    let summary = `
+                        <p>Total Income: ${response.total_income}</p>
+                        <p>Total Expenses: ${response.total_expenses}</p>
+                        <p>Savings Goal: ${response.savings_goal}</p>
+                        <p>Savings Contribution: ${response.savings_contribution}</p>
+                    `;
+                    $("#summary").html(summary);
+                });
+            }
+
+            getBudgetSummary();  // Initial summary load
+        });
+    </script>
+</body>
+</html>

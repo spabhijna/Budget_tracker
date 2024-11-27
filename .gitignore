@@ -1,0 +1,20 @@
+# Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment directory
+/myenv/
+
+# Flask instance folder
+instance/
+
+# .env files for environment variables (if you use one)
+.env
+
+# IDE configurations
+.vscode/
+.idea/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Budget Summary</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <h1>Budget Summary</h1>
+    <p>Income: ${{ income }}</p>
+    <p>Expenses: ${{ expenses }}</p>
+    <p>Balance: ${{ balance }}</p>
+    <p>Savings Goal: ${{ savings_goal }}</p>
+    <p>Savings Contribution: ${{ savings_contribution }}</p>
+    <form action="/add_income" method="POST">
+        <input type="number" name="income_amount" placeholder="Add Income">
+        <button type="submit">Add Income</button>
+    </form>
+    <form action="/add_expense" method="POST">
+        <input type="text" name="expense_category" placeholder="Category">
+        <input type="number" name="expense_amount" placeholder="Amount">
+        <button type="submit">Add Expense</button>
+    </form>
+    <form action="/set_savings" method="POST">
+        <input type="number" name="savings_goal" placeholder="Set Savings Goal">
+        <button type="submit">Set Goal</button>
+    </form>
+    <a href="/plot/expenses"><button>View Expense Distribution</button></a>
+    <a href="/export_data"><button>Export Data</button></a>
+    <button id="mode-toggle">Toggle Dark/Light Mode</button>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
